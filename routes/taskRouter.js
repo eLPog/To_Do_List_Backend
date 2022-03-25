@@ -4,5 +4,7 @@ import {TaskController} from "../controllers/taskController.js";
 const taskRouter = Router()
 
 taskRouter.post('/',TaskController.addTask)
+taskRouter.get('/', TaskController.getAll)
+taskRouter.get('/:taskID', TaskController.getTask)
 
 export {taskRouter}

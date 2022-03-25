@@ -27,4 +27,28 @@ export class TaskModel{
             return false
         }
     }
+    async getAll(userID){
+        try{
+            const [tasks] = await db.execute('SELECT * FROM tasks WHERE userID=:userID', {
+                userID
+            })
+            return tasks
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message,'get all tasks DB')
+            return false
+        }
+    }
+    async getOneTask(taskID){
+        try{
+            const [[task]] = await db.execute('SELECT * FROM tasks WHERE taskID=:taskID', {
+                taskID
+            })
+            return task
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message,'get all tasks DB')
+            return false
+        }
+    }
 }

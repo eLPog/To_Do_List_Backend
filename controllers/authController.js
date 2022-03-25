@@ -13,12 +13,12 @@ import jwt from 'jsonwebtoken'
 export class AuthController {
     static async registerNewUser(req, res) {
         const {email, name, password, password2} = req.body
-      if(!registrationValidation(email,password,password2,name)){
-          res.status(400).json('validation error')
-          return
-      }
         try {
-            const emailAlreadyExist = await new AuthModel().addUser(email, name, password)
+            if(!registrationValidation(email,password,password2,name)){
+                res.status(400).json('validation error')
+                return
+            }
+            const emailAlreadyExist = await new AuthModel().addUser(email, name, password) // return error message if email already exist
             if(emailAlreadyExist){
                 res.status(400).json(emailAlreadyExist)
                 return
