@@ -29,4 +29,16 @@ export class UserModel{
             return false
         }
     }
+    async deleteUser(email){
+        try {
+            await db.execute('DELETE FROM users WHERE email=:email', {
+                email
+            })
+            return true
+        } catch (err) {
+            console.log(err)
+            await saveErrors(err.message, 'add user DB')
+            return false
+        }
+    }
 }

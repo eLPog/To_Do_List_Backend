@@ -40,7 +40,7 @@ export class AuthController {
         try {
             const userModel = new UserModel()
             let user = await userModel.getUser(email)
-            if (!checkPassword(password, user.password)) {
+            if (!user || !checkPassword(password, user.password)) {
                 res.status(400).json('password or email invalid')
                 return
             }

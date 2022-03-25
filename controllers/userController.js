@@ -4,6 +4,7 @@ import {saveErrors} from "../utils/saveErrors.js";
 import {TokenModel} from "../models/tokenModel.js";
 import {saveUsersLogs} from "../utils/saveLogs.js";
 import {getActuallyDate} from "../utils/getActuallyDate.js";
+import {checkPassword} from "../utils/checkPassword.js";
 
 export class UserController {
 
@@ -41,5 +42,26 @@ export class UserController {
             res.status(400).json(err.message)
         }
 
+    }
+
+    static async delete(req, res){
+        const {email} = req.user
+        const {password} = req.body
+        try{
+            if(!password){
+                res.status(400).json('validation error')
+                return
+            }
+            const user = await new UserModel().getUser(email)
+            if(!user || !checkPassword(password,user.password) || !await new UserModel().deleteUser(email)) {
+                res.status(400).json('DB error or password invalid')
+                return;
+            }
+            res.status(200).json('success')
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message, 'user sign out')
+            res.status(400).json(err.message)
+        }
     }
 }
