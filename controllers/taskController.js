@@ -35,12 +35,14 @@ export class TaskController {
         }catch(err){
             console.log(err)
             await saveErrors(err.message, 'get all tasks')
+            res.status(400).json(err.message)
+
         }
     }
     static async getTask(req, res){
         const {taskID} = req.params
         try{
-            const task = await new TaskModel().getOneTask(taskID)
+            const task = await new TaskModel().getOne(taskID)
             if(!task){
                 res.status(400).json('DB error or taskID doesnt exist')
                 return
@@ -49,6 +51,23 @@ export class TaskController {
         }catch(err){
             console.log(err)
             await saveErrors(err.message, 'get one task')
+            res.status(400).json(err.message)
+
+        }
+    }
+    static async deleteTask(req, res){
+        const {taskID} = req.params
+        try{
+           if(! await new TaskModel().deleteOne(taskID)){
+               res.status(400).json('DB error or taskID doesnt exist')
+               return
+           }
+            res.status(200).json('success')
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message, 'delete one task')
+            res.status(400).json(err.message)
+
         }
     }
 }

@@ -39,7 +39,7 @@ export class TaskModel{
             return false
         }
     }
-    async getOneTask(taskID){
+    async getOne(taskID){
         try{
             const [[task]] = await db.execute('SELECT * FROM tasks WHERE taskID=:taskID', {
                 taskID
@@ -48,6 +48,21 @@ export class TaskModel{
         }catch(err){
             console.log(err)
             await saveErrors(err.message,'get all tasks DB')
+            return false
+        }
+    }
+    async deleteOne(taskID){
+        try{
+            if(!await this.getOne(taskID)){
+                return false
+            }
+            await db.execute('DELETE FROM tasks WHERE taskID=:taskID', {
+                taskID
+            })
+            return true
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message,'delete one task DB')
             return false
         }
     }
