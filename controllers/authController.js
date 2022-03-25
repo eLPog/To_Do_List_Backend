@@ -7,14 +7,15 @@ import {AuthModel} from "../models/authModel.js";
 import {UserModel} from "../models/userModel.js";
 import {TokenModel} from "../models/tokenModel.js";
 import jwt from 'jsonwebtoken'
+import {registrationValidation} from "../utils/registrationValidation.js";
 
 export class AuthController {
     static async registerNewUser(req, res) {
         const {email, name, password, password2} = req.body
-        if ((!email || !name || !password) || password !== password2) {
-            res.status(400).json('Validation error')
-            return;
-        }
+      if(!registrationValidation(email,password,password2,name)){
+          res.status(400).json('validation error')
+          return
+      }
         try {
             await new AuthModel().addUser(email, name, password)
             res.status(200).json('success')
