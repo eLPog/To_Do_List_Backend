@@ -8,5 +8,5 @@ taskRouter.get('/', TaskController.getAll)
 taskRouter.get('/:taskID', TaskController.getTask)
 taskRouter.delete('/:taskID', TaskController.deleteTask)
 taskRouter.delete('/', TaskController.deleteAll)
-
+taskRouter.patch('/:taskID', TaskController.update)
 export {taskRouter}

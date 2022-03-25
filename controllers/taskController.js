@@ -85,4 +85,24 @@ export class TaskController {
         }
 
     }
+    static async update(req, res){
+        const {taskID} = req.params
+        const {content} = req.body
+        try{
+            if(content.trim().length<1){
+                res.status(400).json('validation error')
+                return
+            }
+            const task = await new TaskModel().updateTask(taskID,content)
+            if(!task){
+                res.status(400).json('DB error or taskID doesnt exist')
+                return
+            }
+            res.status(200).json(task)
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message, 'update task')
+            res.status(400).json(err.message)
+        }
+    }
 }
