@@ -3,11 +3,12 @@ import {checkPassword} from "../utils/checkPassword.js";
 import {saveUsersLogs} from "../utils/saveLogs.js";
 import {saveErrors} from "../utils/saveErrors.js";
 import {getActuallyDate} from "../utils/getActuallyDate.js";
+import {registrationValidation} from "../utils/registrationValidation.js";
+import {validationEmail} from "../utils/validationEmail.js";
 import {AuthModel} from "../models/authModel.js";
 import {UserModel} from "../models/userModel.js";
 import {TokenModel} from "../models/tokenModel.js";
 import jwt from 'jsonwebtoken'
-import {registrationValidation} from "../utils/registrationValidation.js";
 
 export class AuthController {
     static async registerNewUser(req, res) {
@@ -17,7 +18,11 @@ export class AuthController {
           return
       }
         try {
-            await new AuthModel().addUser(email, name, password)
+            const emailAlreadyExist = await new AuthModel().addUser(email, name, password)
+            if(emailAlreadyExist){
+                res.status(400).json(emailAlreadyExist)
+                return
+            }
             res.status(200).json('success')
         } catch (err) {
             console.log(err)
@@ -28,7 +33,7 @@ export class AuthController {
 
     static async login(req, res) {
         const {email, password} = req.body
-        if (!email || !password) {
+        if ((email.trim().length<1 || password.trim().length<1) || !validationEmail(email)) {
             res.status(400).json('Validation error')
             return;
         }

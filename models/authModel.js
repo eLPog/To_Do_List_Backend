@@ -25,7 +25,7 @@ export class AuthModel {
         } catch (err) {
             console.log(err)
             await saveErrors(err.message, 'add user DB')
-            return false
+            return err.sqlMessage
         }
     }
 
