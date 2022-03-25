@@ -66,4 +66,16 @@ export class TaskModel{
             return false
         }
     }
+    async deleteAll(userID){
+        try{
+            await db.execute('DELETE FROM tasks WHERE userID=:userID', {
+                userID
+            })
+            return true
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message,'delete all tasks DB')
+            return false
+        }
+    }
 }

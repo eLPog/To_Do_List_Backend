@@ -70,4 +70,19 @@ export class TaskController {
 
         }
     }
+    static async deleteAll(req,res){
+        const {userID} = req.user
+        try{
+            if(!await new TaskModel().deleteAll(userID)){
+                res.status(400).json('DB error')
+                return
+            }
+            res.status(200).json('success')
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message, 'delete all tasks')
+            res.status(400).json(err.message)
+        }
+
+    }
 }
