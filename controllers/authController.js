@@ -50,7 +50,7 @@ export class AuthController {
                 userID: user.userID
             }
             const token = jwt.sign(user, jwtAccessKey, {expiresIn: "45m"})
-            await userModel.updateLogin(email)
+            await userModel.setLastLoginDate(email)
             await new TokenModel().addToken(token)
             await saveUsersLogs(user.email, getActuallyDate(), 'sign in')
             res.status(200).json(token)

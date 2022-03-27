@@ -16,7 +16,7 @@ export class UserModel{
             return false
         }
     }
-    async updateLogin(email) {
+    async setLastLoginDate(email) {
         try {
             await db.execute('UPDATE users SET lastLogin=:lastLogin WHERE email=:email', {
                 lastLogin: getActuallyDate(),
@@ -40,5 +40,25 @@ export class UserModel{
             await saveErrors(err.message, 'add user DB')
             return false
         }
+    }
+    async editUser(currentEmail, newUserObj){
+        try{
+            const oldUser = await this.getUser(currentEmail)
+            const newUser = {
+                ...oldUser,
+                ...newUserObj
+            }
+            await db.execute('UPDATE users SET email=:email, name=:name WHERE email=:currentEmail',{
+                email:newUser.email,
+                name:newUser.name,
+                currentEmail
+            })
+            return true
+        }catch(err){
+            console.log(err)
+            await saveErrors(err.message, 'edit user DB')
+            return false
+        }
+
     }
 }
