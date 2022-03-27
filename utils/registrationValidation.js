@@ -10,15 +10,8 @@ export function registrationValidation(email,password,password2,name){
     if(!password || password.trim().length < 5){
         return false
     }
-    if(password!==password2 || name.trim().length < 1 ){
-        return false
-    }
-    return true
+    return password === password2;
 
 
-    // if (((!email || !name || !password) || password !== password2) || !validationEmail(email)){
-    //     return false;
-    // }
-    // return !(email.trim().length < 1 || password.trim().length < 5 || name.trim().length < 1);
 
 }

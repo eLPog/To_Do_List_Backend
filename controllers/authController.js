@@ -33,7 +33,7 @@ export class AuthController {
 
     static async login(req, res) {
         const {email, password} = req.body
-        if ((email.trim().length<1 || password.trim().length<1) || !validationEmail(email)) {
+        if ((password.trim().length<1) || !validationEmail(email)) {
             res.status(400).json('Validation error')
             return;
         }

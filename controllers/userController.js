@@ -7,6 +7,9 @@ import {checkPassword} from "../utils/checkPassword.js";
 import {UserModel} from "../models/userModel.js";
 import {TokenModel} from "../models/tokenModel.js";
 import jwt from "jsonwebtoken";
+import randomatic from 'randomatic'
+import {createHash} from "../utils/createHash.js";
+import {setNewPassword} from "../utils/setNewPassword.js";
 
 export class UserController {
 
@@ -70,15 +73,20 @@ export class UserController {
     static async updateUserData(req, res) {
         const {email} = req.user
         const token = req.headers.authorization.split(" ")[1]
+        let newPassword;
         try {
             const tokenModel = new TokenModel()
             const userModel = new UserModel()
             const user = await userModel.getUser(email)
+            if (req.body.password) {
+                newPassword = setNewPassword(req.body.password, user.password)
+            }
             const newUser = {
                 name: req.body.name ?? user.name,
-                email: !validationEmail(req.body.email) ? email : req.body.email
+                email: !validationEmail(req.body.email) ? email : req.body.email,
+                password: newPassword ?? user.password
             }
-            if (user.name !== newUser.name || user.email !== newUser.email) {
+            if (user.name !== newUser.name || user.email !== newUser.email || newPassword) {
                 if (!user || !await userModel.editUser(email, newUser)) {
                     res.status(400).json('DB error')
                     return;
@@ -98,4 +106,20 @@ export class UserController {
             res.status(400).json(err.message)
         }
     }
+
+    // static async passwordReset(req, res) {
+    //     const {email} = req.user
+    //     try {
+    //         const userModel = new UserModel()
+    //         let user = await userModel.getUser(email)
+    //         const newPassword = randomatic("*", "30", {exclude: "0oOiIlL1"})
+    //         user.password = newPassword
+    //         await userModel.editUser(email,)
+    //
+    //     } catch (err) {
+    //         console.log(err)
+    //         await saveErrors(err.message, 'user password reset')
+    //         res.status(400).json(err.message)
+    //     }
+    // }
 }

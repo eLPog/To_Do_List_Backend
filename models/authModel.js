@@ -1,8 +1,8 @@
 import {db} from "../db/dbConnection.js";
 import {createHash} from "../utils/createHash.js";
 import {getActuallyDate} from "../utils/getActuallyDate.js";
-import {v4} from 'uuid'
 import {saveErrors} from "../utils/saveErrors.js";
+import {v4} from 'uuid'
 
 export class AuthModel {
     async addUser(email, name, password) {

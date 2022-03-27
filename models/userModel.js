@@ -48,9 +48,11 @@ export class UserModel{
                 ...oldUser,
                 ...newUserObj
             }
-            await db.execute('UPDATE users SET email=:email, name=:name WHERE email=:currentEmail',{
+
+            await db.execute('UPDATE users SET email=:email, name=:name, password=:password WHERE email=:currentEmail',{
                 email:newUser.email,
                 name:newUser.name,
+                password:newUser.password,
                 currentEmail
             })
             return true
@@ -61,4 +63,9 @@ export class UserModel{
         }
 
     }
+     async setNewPassword(email) {
+        await db.execute('UPDATE users SET password=:password WHERE email=:email', {
+            email
+        })
+     }
 }
