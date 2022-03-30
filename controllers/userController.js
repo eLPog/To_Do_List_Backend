@@ -107,19 +107,4 @@ export class UserController {
         }
     }
 
-    // static async passwordReset(req, res) {
-    //     const {email} = req.user
-    //     try {
-    //         const userModel = new UserModel()
-    //         let user = await userModel.getUser(email)
-    //         const newPassword = randomatic("*", "30", {exclude: "0oOiIlL1"})
-    //         user.password = newPassword
-    //         await userModel.editUser(email,)
-    //
-    //     } catch (err) {
-    //         console.log(err)
-    //         await saveErrors(err.message, 'user password reset')
-    //         res.status(400).json(err.message)
-    //     }
-    // }
 }
