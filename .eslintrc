@@ -6,8 +6,12 @@
     "node": true,
     "browser": false
   },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
   "extends": [
-    "airbnb"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "max-len": "off",

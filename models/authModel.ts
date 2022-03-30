@@ -1,11 +1,12 @@
-import {db} from "../db/dbConnection.js";
-import {createHash} from "../utils/createHash.js";
-import {getActuallyDate} from "../utils/getActuallyDate.js";
-import {saveErrors} from "../utils/saveErrors.js";
+import {db} from "../db/dbConnection";
+import {createHash} from "../utils/createHash";
+import {getActuallyDate} from "../utils/getActuallyDate";
+import {saveErrors} from "../utils/saveErrors";
 import {v4} from 'uuid'
+import {UserInterface} from "../types/UserInterface";
 
 export class AuthModel {
-    async addUser(email, name, password) {
+    async addUser(email:string, name:string, password:string):Promise<Omit<UserInterface, "lastLogin"> | string> {
         try {
             const newUser = {
                 userID: v4(),

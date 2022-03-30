@@ -1,8 +1,8 @@
 import express, {urlencoded} from 'express'
 import cors from 'cors'
-import {port} from './config.js'
+import {port} from './config.ts'
 import {authRouter} from "../routes/authRouter.js";
-import {isAuth} from "../utils/isAuth.js";
+import {isAuth} from "../utils/isAuth.ts";
 import {userRouter} from "../routes/userRouter.js";
 import {taskRouter} from "../routes/taskRouter.js";
 

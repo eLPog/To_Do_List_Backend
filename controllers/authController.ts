@@ -1,17 +1,18 @@
-import {jwtAccessKey} from "../app/config.js";
-import {checkPassword} from "../utils/checkPassword.js";
-import {saveUsersLogs} from "../utils/saveLogs.js";
-import {saveErrors} from "../utils/saveErrors.js";
-import {getActuallyDate} from "../utils/getActuallyDate.js";
-import {registrationValidation} from "../utils/registrationValidation.js";
-import {validationEmail} from "../utils/validationEmail.js";
-import {AuthModel} from "../models/authModel.js";
-import {UserModel} from "../models/userModel.js";
-import {TokenModel} from "../models/tokenModel.js";
-import jwt from 'jsonwebtoken'
+import {jwtAccessKey} from "../app/config";
+import {checkPassword} from "../utils/checkPassword";
+import {saveUsersLogs} from "../utils/saveLogs";
+import {saveErrors} from "../utils/saveErrors";
+import {registrationValidation} from "../utils/registrationValidation";
+import {validationEmail} from "../utils/validationEmail";
+import {AuthModel} from "../models/authModel";
+import {UserModel} from "../models/userModel";
+import {TokenModel} from "../models/tokenModel";
+import * as jwt from 'jsonwebtoken'
+import {Request, Response} from "express";
+import {UserInterface} from "../types/UserInterface";
 
 export class AuthController {
-    static async registerNewUser(req, res) {
+    static async registerNewUser(req:Request, res:Response):Promise<void> {
         const {email, name, password, password2} = req.body
         try {
             if(!registrationValidation(email,password,password2,name)){
@@ -31,28 +32,28 @@ export class AuthController {
         }
     }
 
-    static async login(req, res) {
+    static async login(req:Request, res:Response):Promise<void> {
         const {email, password} = req.body
         if ((password.trim().length<1) || !validationEmail(email)) {
             res.status(400).json('Validation error')
             return;
         }
         try {
-            const userModel = new UserModel()
-            let user = await userModel.getUser(email)
+            const userModel: UserModel = new UserModel()
+            const user:UserInterface | boolean = await userModel.getUser(email)
             if (!user || !checkPassword(password, user.password)) {
                 res.status(400).json('password or email invalid')
                 return
             }
-            user = {
+            const userDataSendToFront:Omit<UserInterface,"password"|"registerAt" | "lastLogin"> = {
                 name: user.name,
                 email: user.email,
                 userID: user.userID
             }
-            const token = jwt.sign(user, jwtAccessKey, {expiresIn: "45m"})
+            const token= jwt.sign(userDataSendToFront, jwtAccessKey, {expiresIn: "45m"})
             await userModel.setLastLoginDate(email)
             await new TokenModel().addToken(token)
-            await saveUsersLogs(user.email, getActuallyDate(), 'sign in')
+            await saveUsersLogs(user.email,'sign in')
             res.status(200).json(token)
         } catch (err) {
             console.log(err)

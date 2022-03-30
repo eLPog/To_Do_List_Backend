@@ -1,6 +1,6 @@
-import {validationEmail} from "./validationEmail.js";
+import {validationEmail} from "./validationEmail";
 
-export function registrationValidation(email,password,password2,name){
+export function registrationValidation(email:string,password:string,password2:string,name:string):boolean{
     if(!email || !validationEmail(email) || email.trim().length < 1){
         return false
     }

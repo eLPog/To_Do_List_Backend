@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "preserveConstEnums": true,
+        "downlevelIteration": true,
+        "moduleResolution": "Node",
+        "esModuleInterop": false, // importuje jako require???
+        "lib": [
+            "es6"
+        ],
+        "outDir": "dist",
+        "allowSyntheticDefaultImports": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
