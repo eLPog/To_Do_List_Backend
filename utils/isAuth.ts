@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { jwtAccessKey } from '../app/config';
 import { TokenModel } from '../models/tokenModel';
 import {NextFunction, Response} from "express";
