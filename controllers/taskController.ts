@@ -1,9 +1,11 @@
-import {TaskModel} from "../models/taskModel.js";
-import {saveErrors} from "../utils/saveErrors.js";
+import {TaskModel} from "../models/taskModel";
+import {saveErrors} from "../utils/saveErrors";
+import {Request, Response} from "express";
+import {UserFromRequest} from "../types/UserFromRequest";
 
 export class TaskController {
 
-    static async addTask(req, res) {
+    static async addTask(req:UserFromRequest, res:Response):Promise<boolean> {
         const {content} = req.body
         const {userID} = req.user
         if (!content || content.trim().length<1) {
@@ -23,7 +25,7 @@ export class TaskController {
             res.status(400).json(err.message)
         }
     }
-    static async getAll(req, res){
+    static async getAll(req:UserFromRequest, res:Response):Promise<boolean>{
         const {userID} = req.user
         try{
             const tasks = await new TaskModel().getAll(userID)
@@ -39,7 +41,7 @@ export class TaskController {
 
         }
     }
-    static async getTask(req, res){
+    static async getTask(req:Request, res:Response):Promise<void>{
         const {taskID} = req.params
         try{
             const task = await new TaskModel().getOne(taskID)
@@ -55,7 +57,7 @@ export class TaskController {
 
         }
     }
-    static async deleteTask(req, res){
+    static async deleteTask(req:Request, res:Response):Promise<void>{
         const {taskID} = req.params
         try{
            if(! await new TaskModel().deleteOne(taskID)){
@@ -70,7 +72,7 @@ export class TaskController {
 
         }
     }
-    static async deleteAll(req,res){
+    static async deleteAll(req:UserFromRequest,res:Response):Promise<void>{
         const {userID} = req.user
         try{
             if(!await new TaskModel().deleteAll(userID)){
@@ -85,7 +87,7 @@ export class TaskController {
         }
 
     }
-    static async update(req, res){
+    static async update(req:Request, res:Response):Promise<void>{
         const {taskID} = req.params
         const {content} = req.body
         try{

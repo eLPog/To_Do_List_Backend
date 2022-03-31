@@ -1,8 +1,11 @@
-import {db} from "../db/dbConnection.js";
-import {saveErrors} from "../utils/saveErrors.js";
-
+import {db} from "../db/dbConnection";
+import {saveErrors} from "../utils/saveErrors";
+import {FieldPacket} from "mysql2";
+interface Token {
+    token:string
+}
 export class TokenModel{
-    async addToken(token){
+    async addToken(token:string):Promise<boolean>{
         try{
             await db.execute('INSERT INTO tokens (token) VALUES (:token)',{
                 token
@@ -14,17 +17,16 @@ export class TokenModel{
             return false
         }
     }
-    async getTokens(){
+    async getTokens():Promise<Token[]>{
         try{
-            const [tokens] = await db.execute('SELECT * FROM tokens')
+           const [tokens] = await db.execute('SELECT * FROM tokens') as [Token[], FieldPacket[]]
             return tokens
         }catch(err){
             console.log(err)
             await saveErrors(err.message, 'get tokens DB')
-            return false
         }
     }
-    async deleteToken(token){
+    async deleteToken(token:string):Promise<boolean>{
         try{
             await db.execute('DELETE FROM tokens WHERE token=:token',{
                 token

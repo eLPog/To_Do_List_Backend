@@ -1,12 +1,14 @@
-import {db} from "../db/dbConnection.js";
+import {db} from "../db/dbConnection";
 import {v4} from 'uuid'
-import {getActuallyDate} from "../utils/getActuallyDate.js";
-import {saveErrors} from "../utils/saveErrors.js";
+import {getActuallyDate} from "../utils/getActuallyDate";
+import {saveErrors} from "../utils/saveErrors";
+import {TaskInterface} from "../types/TaskInterface";
+import {FieldPacket} from "mysql2";
 
 export class TaskModel {
 
 
-    async add(content, userID) {
+    async add(content:string, userID:string):Promise<TaskInterface | boolean> {
         try {
             const newTask = {
                 taskID: v4(),
@@ -28,11 +30,11 @@ export class TaskModel {
         }
     }
 
-    async getAll(userID) {
+    async getAll(userID:string):Promise<TaskInterface[] | boolean> {
         try {
             const [tasks] = await db.execute('SELECT * FROM tasks WHERE userID=:userID', {
                 userID
-            })
+            }) as [TaskInterface[], FieldPacket[]]
             return tasks
         } catch (err) {
             console.log(err)
@@ -41,11 +43,11 @@ export class TaskModel {
         }
     }
 
-    async getOne(taskID) {
+    async getOne(taskID:string):Promise<TaskInterface | boolean> {
         try {
             const [[task]] = await db.execute('SELECT * FROM tasks WHERE taskID=:taskID', {
                 taskID
-            })
+            }) as [TaskInterface[], FieldPacket[]]
             return task
         } catch (err) {
             console.log(err)
@@ -54,7 +56,7 @@ export class TaskModel {
         }
     }
 
-    async deleteOne(taskID) {
+    async deleteOne(taskID:string):Promise<boolean> {
         try {
             if (!await this.getOne(taskID)) {
                 return false
@@ -70,7 +72,7 @@ export class TaskModel {
         }
     }
 
-    async deleteAll(userID) {
+    async deleteAll(userID:string):Promise<boolean> {
         try {
             await db.execute('DELETE FROM tasks WHERE userID=:userID', {
                 userID
@@ -83,7 +85,7 @@ export class TaskModel {
         }
     }
 
-    async updateTask(taskID,newContent) {
+    async updateTask(taskID:string,newContent:string):Promise<string|boolean | TaskInterface> {
         try {
             if (!await this.getOne(taskID)) {
                 return false

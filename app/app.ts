@@ -1,12 +1,13 @@
-import express, {urlencoded} from 'express'
-import cors from 'cors'
-import {port} from './config.js'
-import {authRouter} from "../routes/authRouter.js";
-import {isAuth} from "../utils/isAuth.js";
-import {userRouter} from "../routes/userRouter.js";
-import {taskRouter} from "../routes/taskRouter.js";
+import * as express from 'express'
+import * as cors from 'cors'
+import {port} from './config'
+import {authRouter} from "../routes/authRouter";
+import {isAuth} from "../utils/isAuth";
+import {userRouter} from "../routes/userRouter";
+import {taskRouter} from "../routes/taskRouter";
 
 class App {
+    private app:express.Application
     constructor() {
         this.createApp()
         this.settings()
@@ -14,26 +15,26 @@ class App {
         this.runServer()
     }
 
-    createApp() {
+   private createApp() {
         this.app = express()
     }
 
-    settings() {
+    private settings() {
         this.app.use(express.json())
-        this.app.use(urlencoded({
+        this.app.use(express.urlencoded({
             extended: true
         }))
         this.app.use(cors())
     }
 
-    routes() {
+    private routes() {
         this.app.use('/v1/api/auth', authRouter)
         this.app.use('/v1/api/user', isAuth, userRouter)
         this.app.use('/v1/api/tasks', isAuth, taskRouter)
     }
 
 
-    runServer() {
+    private runServer() {
         this.app.listen(port, 'localhost', () => console.log(`Server is running on port ${port}`))
     }
 }
