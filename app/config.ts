@@ -1,4 +1,4 @@
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 interface DataBaseSettings {
     database:string,
     host:string,

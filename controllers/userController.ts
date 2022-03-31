@@ -1,18 +1,22 @@
 import jwt from 'jsonwebtoken';
-import randomatic from 'randomatic';
-import { jwtAccessKey } from '../app/config.ts';
-import { validationEmail } from '../utils/validationEmail.ts';
-import { saveErrors } from '../utils/saveErrors.ts';
-import { saveUsersLogs } from '../utils/saveLogs.ts';
-import { getActuallyDate } from '../utils/getActuallyDate.ts';
-import { checkPassword } from '../utils/checkPassword.ts';
-import { UserModel } from '../models/userModel.ts';
-import { TokenModel } from '../models/tokenModel.ts';
-import { createHash } from '../utils/createHash.ts';
-import { setNewPassword } from '../utils/setNewPassword.ts';
+import { jwtAccessKey } from '../app/config';
+import { validationEmail } from '../utils/validationEmail';
+import { saveErrors } from '../utils/saveErrors';
+import { saveUsersLogs } from '../utils/saveLogs';
+import { checkPassword } from '../utils/checkPassword';
+import { UserModel } from '../models/userModel';
+import { TokenModel } from '../models/tokenModel';
+import { setNewPassword } from '../utils/setNewPassword';
+import {Response} from "express";
+import {UserFromRequest} from "../types/UserFromRequest";
+interface NewUser {
+  name:string,
+  email:string,
+  password:string
+}
 
 export class UserController {
-  static async getUser(req, res) {
+  static async getUser(req:UserFromRequest, res:Response) {
     const { email } = req.user;
     if (!email || !validationEmail(email)) {
       res.status(400).json('validation error');
@@ -31,14 +35,14 @@ export class UserController {
     }
   }
 
-  static async logout(req, res) {
+  static async logout(req:UserFromRequest, res:Response) {
     try {
       const token = req.headers.authorization.split(' ')[1];
       if (!await new TokenModel().deleteToken(token)) {
         res.status(400).json('DB error');
         return;
       }
-      await saveUsersLogs(req.user.email, getActuallyDate(), 'sign out');
+      await saveUsersLogs(req.user.email, 'sign out');
       res.status(200).json('success');
     } catch (err) {
       console.log(err);
@@ -47,7 +51,7 @@ export class UserController {
     }
   }
 
-  static async delete(req, res) {
+  static async delete(req:UserFromRequest, res:Response) {
     const { email } = req.user;
     const { password } = req.body;
     try {
@@ -68,7 +72,7 @@ export class UserController {
     }
   }
 
-  static async updateUserData(req, res) {
+  static async updateUserData(req:UserFromRequest, res:Response) {
     const { email } = req.user;
     const token = req.headers.authorization.split(' ')[1];
     let newPassword;
@@ -79,7 +83,7 @@ export class UserController {
       if (req.body.password) {
         newPassword = setNewPassword(req.body.password, user.password);
       }
-      const newUser = {
+      const newUser:NewUser = {
         name: req.body.name ?? user.name,
         email: !validationEmail(req.body.email) ? email : req.body.email,
         password: newPassword ?? user.password,

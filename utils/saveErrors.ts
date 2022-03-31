@@ -1,6 +1,6 @@
 import { writeFile } from 'fs/promises';
 import path from 'path';
-import { errorsLogsDirectory } from '../app/config.js';
+import { errorsLogsDirectory } from '../app/config';
 import { getActuallyDate } from './getActuallyDate';
 
 export async function saveErrors(error:Error, action:string):Promise<void> {
