@@ -5,6 +5,7 @@ import {authRouter} from "../routes/authRouter";
 import {isAuth} from "../utils/isAuth";
 import {userRouter} from "../routes/userRouter";
 import {taskRouter} from "../routes/taskRouter";
+import {notFoundHandler} from "../utils/notFoundHandler";
 
 class App {
     private app:express.Application
@@ -12,6 +13,7 @@ class App {
         this.createApp()
         this.settings()
         this.routes()
+        this.errorHandlers()
         this.runServer()
     }
 
@@ -31,6 +33,9 @@ class App {
         this.app.use('/v1/api/auth', authRouter)
         this.app.use('/v1/api/user', isAuth, userRouter)
         this.app.use('/v1/api/tasks', isAuth, taskRouter)
+    }
+    private errorHandlers(){
+        this.app.use('/', notFoundHandler)
     }
 
 
