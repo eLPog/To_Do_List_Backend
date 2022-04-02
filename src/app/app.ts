@@ -1,11 +1,11 @@
-import * as express from 'express'
-import * as cors from 'cors'
-import {port} from './config'
+import * as express from 'express';
+import * as cors from 'cors';
+import {port} from './config';
 import {authRouter} from "../routes/authRouter";
 import {isAuth} from "../utils/isAuth";
 import {userRouter} from "../routes/userRouter";
 import {taskRouter} from "../routes/taskRouter";
-import {notFoundHandler} from "../utils/notFoundHandler";
+import {notFoundHandler} from "../errorHandlers/notFoundHandler";
 
 class App {
     private app:express.Application
