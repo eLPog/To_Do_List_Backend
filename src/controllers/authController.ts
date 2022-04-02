@@ -20,7 +20,7 @@ export class AuthController {
             }
             const emailAlreadyExist = await new AuthModel().addUser(email, name, password) // return error message if email already exist
             if(emailAlreadyExist){
-               new ValidationError('Email already exist')
+               throw new ValidationError('Email already exist')
             }
             res.status(200).json('success')
     }
