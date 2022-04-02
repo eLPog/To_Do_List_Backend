@@ -6,7 +6,7 @@ import {v4} from 'uuid'
 import {UserInterface} from "../types/UserInterface";
 
 export class AuthModel {
-    async addUser(email:string, name:string, password:string):Promise<Omit<UserInterface, "lastLogin"> | string> {
+    async addUser(email:string, name:string, password:string):Promise<Omit<UserInterface, "lastLogin"> | Error> {
         try {
             const newUser = {
                 userID: v4(),
@@ -26,7 +26,7 @@ export class AuthModel {
         } catch (err) {
             console.log(err)
             await saveErrors(err.message, 'add user DB')
-            return err.sqlMessage
+            return err
         }
     }
 

@@ -3,6 +3,7 @@ import {saveErrors} from "../utils/saveErrors";
 import {Request, Response} from "express";
 import {UserFromRequest} from "../types/UserFromRequest";
 import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
+import {sendTasksToEmail} from "../utils/sendTasksToEmail";
 
 export class TaskController {
 
@@ -66,5 +67,16 @@ export class TaskController {
             }
             res.status(200).json(task)
 
+    }
+    static async sendTasksToEmail(req:UserFromRequest, res:Response):Promise<void>{
+        const {userID, email} = req.user
+        const tasksToSend:string[] = []
+        const tasks = await new TaskModel().getAll(userID)
+        if(!tasks){
+            throw new UnexpectedError()
+        }
+        tasks.map(el=>tasksToSend.push(el.content))
+        sendTasksToEmail(email,tasksToSend)
+        res.status(200).json('Success')
     }
 }

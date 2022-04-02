@@ -4,6 +4,7 @@ import {TaskController} from "../controllers/taskController";
 const taskRouter = Router()
 taskRouter.get('/', TaskController.getAll)
 taskRouter.get('/:taskID', TaskController.getTask)
+taskRouter.post('/send',TaskController.sendTasksToEmail)
 taskRouter.post('/', TaskController.addTask)
 taskRouter.patch('/:taskID', TaskController.update)
 taskRouter.delete('/:taskID', TaskController.deleteTask)
