@@ -9,17 +9,20 @@ import {TokenModel} from "../models/tokenModel";
 import * as jwt from 'jsonwebtoken'
 import {Request, Response} from "express";
 import {UserInterface} from "../types/UserInterface";
-import {ValidationError} from "../errorHandlers/errorsHandler";
+import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
+import * as randomatic from 'randomatic'
+import {createHash} from "../utils/createHash";
+import {sendNewPassword} from "../utils/sendNewPassword";
+import {sendTasksToEmail} from "../utils/sendTasksToEmail";
 
 export class AuthController {
     static async registerNewUser(req: Request, res: Response): Promise<void> {
         const {email, name, password, password2} = req.body
-
         if (!registrationValidation(email, password, password2, name)) {
             throw new ValidationError('Validation error')
         }
         const emailAlreadyExist = await new AuthModel().addUser(email, name, password) // return error message if email already exist
-        if (emailAlreadyExist) {
+        if (emailAlreadyExist instanceof Error) {
             throw new ValidationError('Email already exist')
         }
         res.status(200).json('success')
@@ -45,5 +48,20 @@ export class AuthController {
         await new TokenModel().addToken(token)
         await saveUsersLogs(user.email, 'sign in')
         res.status(200).json(token)
+    }
+
+    static async resetPassword(req: Request, res: Response) {
+        const {email} = req.body
+        const userModel: UserModel = new UserModel()
+        const user: UserInterface = await userModel.getUser(email)
+        if (!user) {
+            throw new UnexpectedError()
+        }
+        const newPassword: string = randomatic('Aa0!', 10)
+        user.password = createHash(newPassword)
+        await userModel.editUser(email, user)
+        sendNewPassword(email,newPassword)
+        res.status(200).json('Success')
+
     }
 }

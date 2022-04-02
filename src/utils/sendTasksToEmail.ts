@@ -8,7 +8,7 @@ export async function sendTasksToEmail(email: string, tasks: string[]) {
         to: email,
         subject: `You tasks from To Do List`,
         text: tasksToSend,
-        html: `<b>Your tasks from To Do List:</b><p>${tasks}</p>`
+        html: `<b>Your tasks from To Do List:</b><p>${tasksToSend}</p>`
     })
 
 }
