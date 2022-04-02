@@ -1,11 +1,13 @@
 import * as express from 'express';
 import * as cors from 'cors';
+require('express-async-errors');
 import {port} from './config';
 import {authRouter} from "../routes/authRouter";
 import {isAuth} from "../utils/isAuth";
 import {userRouter} from "../routes/userRouter";
 import {taskRouter} from "../routes/taskRouter";
 import {notFoundHandler} from "../errorHandlers/notFoundHandler";
+import {httpFormater} from "../errorHandlers/errorsHandler";
 
 class App {
     private app:express.Application
@@ -36,6 +38,7 @@ class App {
     }
     private errorHandlers(){
         this.app.use('/', notFoundHandler)
+        this.app.use('/', httpFormater)
     }
 
 
