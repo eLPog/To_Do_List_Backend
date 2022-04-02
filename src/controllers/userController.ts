@@ -1,7 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import {jwtAccessKey} from '../app/config';
 import {validationEmail} from '../utils/validationEmail';
-import {saveErrors} from '../utils/saveErrors';
 import {saveUsersLogs} from '../utils/saveLogs';
 import {checkPassword} from '../utils/checkPassword';
 import {UserModel} from '../models/userModel';
