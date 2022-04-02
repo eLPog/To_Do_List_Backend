@@ -10,7 +10,6 @@ import * as jwt from 'jsonwebtoken'
 import {Request, Response} from "express";
 import {UserInterface} from "../types/UserInterface";
 import {ValidationError} from "../errorHandlers/errorsHandler";
-import {sendTasksToEmail} from "../utils/sendTasksToEmail";
 
 export class AuthController {
     static async registerNewUser(req: Request, res: Response): Promise<void> {
@@ -45,7 +44,6 @@ export class AuthController {
         await userModel.setLastLoginDate(email)
         await new TokenModel().addToken(token)
         await saveUsersLogs(user.email, 'sign in')
-         sendTasksToEmail('lukasz.pogorzelski@op.pl', "To jest wiadomość odemnie")
         res.status(200).json(token)
     }
 }

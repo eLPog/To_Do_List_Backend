@@ -1,14 +1,12 @@
 import {nodemailerConfig} from "./mailerConfig";
 
-export async function sendTasksToEmail(email: string, tasks: string[]) {
-    const tasksToSend = tasks.join(`, `)
+export async function sendNewPassword(email:string,newPassword:string){
     const transporter = await nodemailerConfig();
     await transporter.sendMail({
         from: `To Do List`,
         to: email,
         subject: `You tasks from To Do List`,
-        text: tasksToSend,
-        html: `<b>Your tasks from To Do List:</b><p>${tasks}</p>`
+        text: newPassword,
+        html: `<b>Your new password:</b><br>${newPassword}<br>`
     })
-
 }

@@ -30,7 +30,7 @@ export class TaskModel {
         }
     }
 
-    async getAll(userID:string):Promise<TaskInterface[] | boolean> {
+    async getAll(userID:string):Promise<TaskInterface[]> {
         try {
             const [tasks] = await db.execute('SELECT * FROM tasks WHERE userID=:userID', {
                 userID
@@ -39,7 +39,6 @@ export class TaskModel {
         } catch (err) {
             console.log(err)
             await saveErrors(err.message, 'get all tasks DB')
-            return false
         }
     }
 
