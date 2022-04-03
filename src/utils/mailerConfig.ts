@@ -1,4 +1,5 @@
 import * as nodemailer from 'nodemailer'
+import {emailSettings} from "../app/config";
 
 export const nodemailerConfig = async ()=>{
    const transporter = await nodemailer.createTransport({
@@ -6,8 +7,8 @@ export const nodemailerConfig = async ()=>{
         port:587,
         secure:false,
         auth:{
-            user:"lukastodolist@gmail.com",
-            pass:"taktak59"
+            user:emailSettings.emailUser,
+            pass:emailSettings.emailPass
         },
         tls:{
             rejectUnauthorized:false
