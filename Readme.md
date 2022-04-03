@@ -1,10 +1,12 @@
 REST API for creating a to-do list. The application has the following functionalities:
 
 Structure:
-The structure of the application is divided into three main elements:
-1.Routes:Identification of all endpoints
-2.Models: All database operations
-3.Controllers: Endpoints handling logic
+The structure of the application is divided into few main elements/folders:
+1.App: Main App file and Config file, contains the functions needed to run the application.
+2.Routes:Identification of all endpoints.
+3.Models: All database operations.
+4.Controllers: Endpoints handling logic.
+5.Utils: Additional functions
 
 User registration and login:
 
@@ -18,6 +20,8 @@ User registration and login:
 
 -Upon successful login, the token is added to the database, and on successful logout, it is removed from it. This enables the token to be deactivated on request.
 
+-if the user has forgotten the password, a new random password will be created and sent to the provided email
+
 Tasks:
 
 The logged user can take the following actions on the note:
@@ -28,15 +32,17 @@ The logged user can take the following actions on the note:
 
 -get all
 
--update
+-edit
 
 -delete one
 
 -delete all 
 
+-send all the tasks on email
+
 Logs and errors data save:
 
-The application saves all user logins/logoffs and errors to a file. The file path is set in environment variables.
+The application saves all user logins/logoffs and errors to a file. The file path is set in environment variables. 
 
 Database:
 
