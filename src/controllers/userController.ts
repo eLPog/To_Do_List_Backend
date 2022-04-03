@@ -21,7 +21,7 @@ export class UserController {
     static async getUser(req: UserFromRequest, res: Response) {
         const {email} = req.user;
         if (!email || !validationEmail(email)) {
-            res.status(400).json('validation error');
+           throw new ValidationError('Email format invalid')
         }
         const user = await new UserModel().getUser(email);
         if (!user) {
