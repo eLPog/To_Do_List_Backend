@@ -1,5 +1,5 @@
-import * as express from 'express';
-import * as cors from 'cors';
+import  express from 'express';
+import  cors from 'cors';
 require('express-async-errors');
 import {port} from './config';
 import {authRouter} from "../routes/authRouter";

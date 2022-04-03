@@ -10,7 +10,7 @@ import * as jwt from 'jsonwebtoken'
 import {Request, Response} from "express";
 import {UserInterface} from "../types/UserInterface";
 import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
-import * as randomatic from 'randomatic'
+import randomatic from 'randomatic'
 import {createHash} from "../utils/createHash";
 import {sendNewPassword} from "../utils/sendNewPassword";
 import {sendTasksToEmail} from "../utils/sendTasksToEmail";
