@@ -2,8 +2,8 @@
   "name": "tdl",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "main": "index.js",
+  "type": "commonjs",
+  "main": "app.js",
   "scripts": {
     "dev-start": "ts-node-dev src/app/app.ts"
   },

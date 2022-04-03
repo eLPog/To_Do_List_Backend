@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "target": "es6",
+        "module": "commonjs",
         "sourceMap": true,
         "noImplicitAny": true,
         "preserveConstEnums": true,
         "downlevelIteration": true,
         "moduleResolution": "Node",
-        "esModuleInterop": false, // importuje jako require???
+        "esModuleInterop": true,
         "lib": [
             "es6"
         ],
