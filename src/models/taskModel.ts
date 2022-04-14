@@ -1,11 +1,11 @@
-import {db} from "../db/dbConnection";
+import db from "../db/dbConnection";
 import {v4} from 'uuid'
 import {getActuallyDate} from "../utils/getActuallyDate";
 import {saveErrors} from "../utils/saveErrors";
 import {TaskInterface} from "../types/TaskInterface";
 import {FieldPacket} from "mysql2";
 
-export class TaskModel {
+ class TaskModel {
 
 
     async add(content:string, userID:string):Promise<TaskInterface | boolean> {
@@ -101,3 +101,5 @@ export class TaskModel {
         }
     }
 }
+
+export default TaskModel

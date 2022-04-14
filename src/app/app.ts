@@ -1,5 +1,7 @@
 import  express from 'express';
 import  cors from 'cors';
+import {awilixSetup} from "../di-setup/containerSetup";
+awilixSetup()
 require('express-async-errors');
 import {port} from './config';
 import {authRouter} from "../routes/authRouter";
@@ -8,6 +10,7 @@ import {userRouter} from "../routes/userRouter";
 import {taskRouter} from "../routes/taskRouter";
 import {notFoundHandler} from "../errorHandlers/notFoundHandler";
 import {httpFormater} from "../errorHandlers/errorsHandler";
+
 
 class App {
     private app:express.Application

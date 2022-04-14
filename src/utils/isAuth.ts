@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { jwtAccessKey } from '../app/config';
-import { TokenModel } from '../models/tokenModel';
+import TokenModel  from '../models/tokenModel';
 import {NextFunction, Response} from "express";
 import {UserFromRequest} from "../types/UserFromRequest";
 import {UserInterface} from "../types/UserInterface";
