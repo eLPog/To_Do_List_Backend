@@ -7,6 +7,7 @@ The structure of the application is divided into few main elements/folders:
 3.Models: All database operations.
 4.Controllers: Endpoints handling logic.
 5.Utils: Additional functions
+6.Dependency injection using awilix package.
 
 User registration and login:
 
