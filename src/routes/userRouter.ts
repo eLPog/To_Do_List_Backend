@@ -1,5 +1,6 @@
 import {Router} from "express";
-import {UserController} from "../controllers/userController";
+import {container} from "../di-setup/containerSetup";
+const UserController = container.resolve('UserController')
 const userRouter = Router()
 userRouter.get('/',UserController.getUser )
 userRouter.post('/logout',UserController.logout)

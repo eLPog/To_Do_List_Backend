@@ -1,13 +1,17 @@
-import { db } from '../db/dbConnection';
 import { saveErrors } from '../utils/saveErrors';
 import { getActuallyDate } from '../utils/getActuallyDate';
 import {UserInterface} from "../types/UserInterface";
 import {FieldPacket} from "mysql2";
 
-export class UserModel {
-  async getUser(email:string):Promise< UserInterface> {
+class UserModel {
+   private db
+   // @ts-ignore
+  constructor({db}) {
+     this.db = db
+   }
+   getUser = async (email:string):Promise< UserInterface> => {
     try {
-      const [[user]] = await db.execute('SELECT * FROM users WHERE email=:email', {
+      const [[user]] = await this.db.execute('SELECT * FROM users WHERE email=:email', {
         email,
       }) as [UserInterface[],FieldPacket[]];
       return user;
@@ -17,9 +21,9 @@ export class UserModel {
     }
   }
 
-  async setLastLoginDate(email:string):Promise<boolean> {
+   setLastLoginDate = async (email:string):Promise<boolean> =>{
     try {
-      await db.execute('UPDATE users SET lastLogin=:lastLogin WHERE email=:email', {
+      await this.db.execute('UPDATE users SET lastLogin=:lastLogin WHERE email=:email', {
         lastLogin: getActuallyDate(),
         email,
       });
@@ -31,9 +35,9 @@ export class UserModel {
     }
   }
 
-  async deleteUser(email:string):Promise<boolean> {
+   deleteUser = async (email:string):Promise<boolean> => {
     try {
-      await db.execute('DELETE FROM users WHERE email=:email', {
+      await this.db.execute('DELETE FROM users WHERE email=:email', {
         email,
       });
       return true;
@@ -44,7 +48,7 @@ export class UserModel {
     }
   }
 
-  async editUser(currentEmail:string, newUserObj:Omit<UserInterface,"userID" | "lastLogin" | "registerAt">):Promise<boolean> {
+   editUser = async (currentEmail:string, newUserObj:Omit<UserInterface,"userID" | "lastLogin" | "registerAt">):Promise<boolean> => {
     try {
       const oldUser = await this.getUser(currentEmail) as UserInterface;
       const newUser:UserInterface = {
@@ -52,7 +56,7 @@ export class UserModel {
         ...newUserObj,
       };
 
-      await db.execute('UPDATE users SET email=:email, name=:name, password=:password WHERE email=:currentEmail', {
+      await this.db.execute('UPDATE users SET email=:email, name=:name, password=:password WHERE email=:currentEmail', {
         email: newUser.email,
         name: newUser.name,
         password: newUser.password,
@@ -66,9 +70,5 @@ export class UserModel {
     }
   }
 
-  // async setNewPassword(email:string):Promise<void> {
-  //   await db.execute('UPDATE users SET password=:password WHERE email=:email', {
-  //     email,
-  //   });
-  // }
 }
+export default UserModel

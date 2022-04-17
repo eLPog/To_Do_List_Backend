@@ -3,13 +3,12 @@ import {jwtAccessKey} from '../app/config';
 import {validationEmail} from '../utils/validationEmail';
 import {saveUsersLogs} from '../utils/saveLogs';
 import {checkPassword} from '../utils/checkPassword';
-import {UserModel} from '../models/userModel';
-import {TokenModel} from '../models/tokenModel';
 import {setNewPassword} from '../utils/setNewPassword';
 import {Response} from "express";
 import {UserFromRequest} from "../types/UserFromRequest";
 import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
 import {UserInterface} from "../types/UserInterface";
+import {InterfaceUserModel} from "../types/InterfaceUserModel";
 
 interface NewUser {
     name: string,
@@ -17,13 +16,22 @@ interface NewUser {
     password: string
 }
 
-export class UserController {
-    static async getUser(req: UserFromRequest, res: Response) {
+class UserController {
+    private UserModel: InterfaceUserModel;
+    private TokenModel: any
+
+    // @ts-ignore
+    constructor({UserModel, TokenModel}) {
+        this.UserModel = UserModel
+        this.TokenModel = TokenModel
+    }
+
+    getUser = async (req: UserFromRequest, res: Response):Promise<void> => {
         const {email} = req.user;
         if (!email || !validationEmail(email)) {
-           throw new ValidationError('Email format invalid')
+            throw new ValidationError('Email format invalid')
         }
-        const user = await new UserModel().getUser(email);
+        const user = await this.UserModel.getUser(email);
         if (!user) {
             throw new UnexpectedError()
         }
@@ -31,68 +39,68 @@ export class UserController {
 
     }
 
-    static async logout(req: UserFromRequest, res: Response) {
+     logout = async(req: UserFromRequest, res: Response):Promise<void> =>{
         const token = req.headers.authorization.split(' ')[1];
-        if (!await new TokenModel().deleteToken(token)) {
-           throw new UnexpectedError()
+        if (!await this.TokenModel.deleteToken(token)) {
+            throw new UnexpectedError()
         }
         await saveUsersLogs(req.user.email, 'sign out');
         res.status(200).json('success');
 
     }
 
-    static async delete(req: UserFromRequest, res: Response) {
+    delete = async (req: UserFromRequest, res: Response):Promise<void> => {
         const {email} = req.user;
         const {password} = req.body;
-            if (!password) {
-               throw new ValidationError('Enter the password.')
-            }
-            const user = await new UserModel().getUser(email);
-            if(!checkPassword(password, user.password)){
-                throw new ValidationError('Password incorrect')
-            }
-            if (!user || !await new UserModel().deleteUser(email)) {
-              throw new UnexpectedError();
-            }
-            res.status(200).json('Success');
+        if (!password) {
+            throw new ValidationError('Enter the password.')
+        }
+        const user = await this.UserModel.getUser(email);
+        if (!checkPassword(password, user.password)) {
+            throw new ValidationError('Password incorrect')
+        }
+        if (!user || !await this.UserModel.deleteUser(email)) {
+            throw new UnexpectedError();
+        }
+        res.status(200).json('Success');
 
     }
 
-    static async updateUserData(req: UserFromRequest, res: Response) {
+    updateUserData = async (req: UserFromRequest, res: Response):Promise<void> => {
         const {email} = req.user;
         const token = req.headers.authorization.split(' ')[1];
         let newPassword;
         let newToken;
-            const tokenModel = new TokenModel();
-            const userModel = new UserModel();
-            const user = await userModel.getUser(email);
-            if(!user){
+        const user = await this.UserModel.getUser(email);
+        if (!user) {
+            throw new UnexpectedError();
+        }
+        if (req.body.password) {
+            newPassword = setNewPassword(req.body.password, user.password);
+        }
+
+        const newUser: NewUser = {
+            name: req.body.name ?? user.name,
+            email: !validationEmail(req.body.email) ? email : req.body.email,
+            password: newPassword ?? user.password,
+        };
+
+        const userDataToFront: Omit<UserInterface, "password" | "registerAt" | "lastLogin"> = {
+            email: newUser.email,
+            name: newUser.name,
+            userID: user.userID
+        }
+//create new token and delete old token when password was changed
+        if (newPassword) {
+            newToken = jwt.sign(userDataToFront, jwtAccessKey, {expiresIn: '45m'});
+            if (!await this.TokenModel.deleteToken(token) || !await this.TokenModel.addToken(newToken)) {
                 throw new UnexpectedError();
             }
-            if (req.body.password) {
-                newPassword = setNewPassword(req.body.password, user.password);
-            }
-
-            const newUser: NewUser = {
-                name: req.body.name ?? user.name,
-                email: !validationEmail(req.body.email) ? email : req.body.email,
-                password: newPassword ?? user.password,
-            };
-
-            const userDataToFront:Omit<UserInterface,"password"|"registerAt" | "lastLogin"> = {
-                email:newUser.email,
-                name:newUser.name,
-                userID:user.userID
-            }
-//create new token and delete old token when password was changed
-            if (newPassword) {
-                    newToken = jwt.sign(userDataToFront, jwtAccessKey, {expiresIn: '45m'});
-                    if (!await tokenModel.deleteToken(token) || !await tokenModel.addToken(newToken)) {
-                        throw new UnexpectedError();
-                    }
-                }
-            await userModel.editUser(email,newUser)
-            res.status(200).json({userDataToFront,newToken});
+        }
+        await this.UserModel.editUser(email, newUser)
+        res.status(200).json({userDataToFront, newToken});
 
     }
 }
+
+export default UserController

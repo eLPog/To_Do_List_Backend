@@ -1,10 +1,10 @@
-import {db} from "../db/dbConnection";
+import db from "../db/dbConnection";
 import {saveErrors} from "../utils/saveErrors";
 import {FieldPacket} from "mysql2";
 interface Token {
     token:string
 }
-export class TokenModel{
+ class TokenModel{
     async addToken(token:string):Promise<boolean>{
         try{
             await db.execute('INSERT INTO tokens (token) VALUES (:token)',{
@@ -39,3 +39,4 @@ export class TokenModel{
         }
     }
 }
+export default TokenModel
