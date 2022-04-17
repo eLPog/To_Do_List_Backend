@@ -1,5 +1,6 @@
 import {Router} from "express";
-import {TaskController} from "../controllers/taskController";
+import {container} from "../di-setup/containerSetup";
+const TaskController = container.resolve('TaskController')
 
 const taskRouter = Router()
 taskRouter.get('/', TaskController.getAll)

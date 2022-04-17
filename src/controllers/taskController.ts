@@ -1,19 +1,24 @@
-import {TaskModel} from "../models/taskModel";
-import {saveErrors} from "../utils/saveErrors";
+// import {TaskModel} from "../models/taskModel";
 import {Request, Response} from "express";
 import {UserFromRequest} from "../types/UserFromRequest";
 import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
 import {sendTasksToEmail} from "../utils/sendTasksToEmail";
+import {InterfaceTaskModel} from "../types/InterfaceTaskModel";
 
-export class TaskController {
+ class TaskController {
+     private TaskModel:InterfaceTaskModel
+     // @ts-ignore
+     constructor({TaskModel}) {
+         this.TaskModel = TaskModel
+     }
 
-    static async addTask(req: UserFromRequest, res: Response): Promise<void> {
+      addTask = async (req: UserFromRequest, res: Response): Promise<void> =>{
         const {content} = req.body
         const {userID} = req.user
         if (!content || content.trim().length < 1) {
             throw new ValidationError('The content of the task must contain at least 1 character')
         }
-        const newTask = await new TaskModel().add(content, userID)
+        const newTask = await this.TaskModel.add(content, userID)
         if (!newTask) {
             throw new UnexpectedError()
         }
@@ -21,9 +26,9 @@ export class TaskController {
 
     }
 
-    static async getAll(req: UserFromRequest, res: Response): Promise<void> {
+      getAll = async (req: UserFromRequest, res: Response): Promise<void> => {
         const {userID} = req.user
-            const tasks = await new TaskModel().getAll(userID)
+            const tasks = await this.TaskModel.getAll(userID)
             if (!tasks) {
                throw new UnexpectedError()
             }
@@ -31,47 +36,47 @@ export class TaskController {
 
     }
 
-    static async getTask(req: Request, res: Response): Promise<void> {
+      getTask = async (req: Request, res: Response): Promise<void> => {
         const {taskID} = req.params
-            const task = await new TaskModel().getOne(taskID)
+            const task = await this.TaskModel.getOne(taskID)
             if (!task) {
                throw new UnexpectedError('Check task id number')
             }
             res.status(200).json(task)
     }
 
-    static async deleteTask(req: Request, res: Response): Promise<void> {
+      deleteTask = async (req: Request, res: Response): Promise<void> => {
         const {taskID} = req.params
-            if (!await new TaskModel().deleteOne(taskID)) {
+            if (!await this.TaskModel.deleteOne(taskID)) {
                throw new UnexpectedError('Check task id number');
             }
             res.status(200).json('success')
     }
-    static async deleteAll(req: UserFromRequest, res: Response): Promise<void> {
+      deleteAll = async (req: UserFromRequest, res: Response): Promise<void> =>{
         const {userID} = req.user
-            if (!await new TaskModel().deleteAll(userID)) {
+            if (!await this.TaskModel.deleteAll(userID)) {
               throw new UnexpectedError()
             }
             res.status(200).json('Success')
     }
 
-    static async update(req: Request, res: Response): Promise<void> {
+      update = async (req: Request, res: Response): Promise<void> =>{
         const {taskID} = req.params
         const {content} = req.body
             if (content.trim().length < 1) {
                throw new ValidationError('The content of the task must contain at least 1 character')
             }
-            const task = await new TaskModel().updateTask(taskID, content)
+            const task = await this.TaskModel.updateTask(taskID, content)
             if (!task) {
               throw new UnexpectedError();
             }
             res.status(200).json(task)
 
     }
-    static async sendTasksToEmail(req:UserFromRequest, res:Response):Promise<void>{
+      sendTasksToEmail = async (req:UserFromRequest, res:Response):Promise<void> => {
         const {userID, email} = req.user
         const tasksToSend:string[] = []
-        const tasks = await new TaskModel().getAll(userID)
+        const tasks = await this.TaskModel.getAll(userID)
         if(!tasks){
             throw new UnexpectedError()
         }
@@ -80,3 +85,4 @@ export class TaskController {
         res.status(200).json('Success')
     }
 }
+export default TaskController
