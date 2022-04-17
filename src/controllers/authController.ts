@@ -15,7 +15,7 @@ class AuthController {
     private AuthenticationModel;
     private UserModel:InterfaceUserModel;
     private TokenModel
-    // @ts-ignore
+   
     constructor({AuthenticationModel, UserModel, TokenModel}){
         this.AuthenticationModel = AuthenticationModel
         this.UserModel = UserModel
