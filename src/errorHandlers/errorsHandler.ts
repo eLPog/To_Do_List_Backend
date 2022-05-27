@@ -7,8 +7,10 @@ export const httpFormater = (err:Error, req:Request, res:Response, next:NextFunc
     if(err){
         if(err instanceof ValidationError){
         res.status(400).json(err.message)
+            return
         }
         res.status(500).json(`Unexpected error. Please try again. ${err.message}`)
+        return
     }else{
         next();
     }
