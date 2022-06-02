@@ -1,5 +1,6 @@
 import {Router} from "express";
-import {container} from "../di-setup/containerSetup";
+import {awilixSetup} from "../di-setup/containerSetup";
+const container = awilixSetup();
 const TaskController = container.resolve('TaskController')
 
 const taskRouter = Router()

@@ -25,7 +25,7 @@ class AuthController {
     registerNewUser = async (req: Request, res: Response): Promise<void> => {
         const {email, name, password, password2} = req.body
         if (!registrationValidation(email, password, password2, name)) {
-            throw new ValidationError('Validation error')
+            throw new ValidationError('Check if email is correct and if password have min. 5 characters')
         }
         const emailAlreadyExist = await this.AuthenticationModel.addUser(email, name, password) // return error message if email already exist
         if (emailAlreadyExist instanceof Error) {

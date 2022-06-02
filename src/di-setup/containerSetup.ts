@@ -9,11 +9,12 @@ import TaskController from "../controllers/taskController";
 import TaskModel from "../models/taskModel";
 import db from "../db/dbConnection"
 
- const container = awilix.createContainer({
-    injectionMode:InjectionMode.PROXY
-})
+
 function awilixSetup(){
-    container.register({
+    const container = awilix.createContainer({
+        injectionMode:InjectionMode.PROXY
+    })
+    return container.register({
         AuthenticationController:awilix.asClass(AuthController),
         UserController:awilix.asClass(UserController),
         TaskController:awilix.asClass(TaskController),
@@ -25,4 +26,4 @@ function awilixSetup(){
     })
 }
 
-export {container, awilixSetup}
+export {awilixSetup}
