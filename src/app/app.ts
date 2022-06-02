@@ -27,14 +27,24 @@ class App {
     }
 
     private settings() {
+        this.app.use(cors({
+            "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+            "preflightContinue": false,
+            "optionsSuccessStatus": 204
+
+        }))
         this.app.use(express.json())
         this.app.use(express.urlencoded({
             extended: true
         }))
-        this.app.use(cors())
+
     }
 
     private routes() {
+        this.app.post('/v1/api', (req, res)=>{
+            console.log(req.body)
+res.json({zwrotka:'dupcia fajna jest'})
+        })
         this.app.use('/v1/api/auth', authRouter)
         this.app.use('/v1/api/user', isAuth, userRouter)
         this.app.use('/v1/api/tasks', isAuth, taskRouter)
