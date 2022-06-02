@@ -1,5 +1,6 @@
-import {container} from "../di-setup/containerSetup";
 import {Router} from 'express'
+import {awilixSetup} from "../di-setup/containerSetup";
+const container = awilixSetup();
 const AuthController = container.resolve('AuthenticationController')
 const authRouter = Router()
 authRouter.post('/register', AuthController.registerNewUser)
