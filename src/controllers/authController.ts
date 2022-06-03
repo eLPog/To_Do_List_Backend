@@ -16,8 +16,10 @@ import TokenModel from "../models/tokenModel";
 class AuthController {
     private AuthenticationModel:AuthModel;
     private UserModel:InterfaceUserModel;
+
     private TokenModel:TokenModel
     constructor({AuthenticationModel, UserModel, TokenModel}:{AuthenticationModel:AuthModel,UserModel:InterfaceUserModel,TokenModel:TokenModel}){
+
         this.AuthenticationModel = AuthenticationModel
         this.UserModel = UserModel
         this.TokenModel = TokenModel

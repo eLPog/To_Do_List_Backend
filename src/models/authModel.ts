@@ -6,8 +6,7 @@ import {UserInterface} from "../types/UserInterface";
 
  class AuthModel {
      private db:any
-     // @ts-ignore
-     constructor({db}) {
+     constructor({db}:any) {
          this.db = db
      }
      addUser = async (email:string, name:string, password:string):Promise<Omit<UserInterface, "lastLogin"> | Error> => {
