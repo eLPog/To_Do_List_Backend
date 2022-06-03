@@ -11,12 +11,15 @@ import randomatic from 'randomatic'
 import {createHash} from "../utils/createHash";
 import {sendNewPassword} from "../utils/sendNewPassword";
 import {InterfaceUserModel} from "../types/InterfaceUserModel";
+import AuthModel from "../models/authModel";
+import TokenModel from "../models/tokenModel";
 class AuthController {
-    private AuthenticationModel;
+    private AuthenticationModel:AuthModel;
     private UserModel:InterfaceUserModel;
-    private TokenModel
-   
-    constructor({AuthenticationModel, UserModel, TokenModel}){
+
+    private TokenModel:TokenModel
+    constructor({AuthenticationModel, UserModel, TokenModel}:{AuthenticationModel:AuthModel,UserModel:InterfaceUserModel,TokenModel:TokenModel}){
+
         this.AuthenticationModel = AuthenticationModel
         this.UserModel = UserModel
         this.TokenModel = TokenModel

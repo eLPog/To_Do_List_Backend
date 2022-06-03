@@ -5,8 +5,7 @@ import {FieldPacket} from "mysql2";
 
 class UserModel {
    private db
-   // @ts-ignore
-  constructor({db}) {
+  constructor({db}:any) {
      this.db = db
    }
    getUser = async (email:string):Promise< UserInterface> => {

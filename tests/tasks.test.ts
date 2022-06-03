@@ -2,14 +2,24 @@ import {awilixSetup} from "../src/di-setup/containerSetup";
 import db from "../src/db/dbConnection"
 let cont:any;
 let model:any;
-const userID = 'test123id'
+let register:any;
+let email = 'test@tester.com';
+let name = 'testUser';
+let password = 'password';
+let userID:string;
 beforeAll(async()=>{
     cont = await awilixSetup();
     model = cont.resolve('TaskModel')
+    register = cont.resolve('AuthenticationModel')
+    const newUser = await register.addUser(email,name,password)
+    userID = newUser.userID
 })
 afterAll(async()=>{
    await db.execute('DELETE FROM tasks WHERE content LIKE :testString',
         {testString: "test%"})
+    await db.execute('DELETE FROM users WHERE userID=:userID', {
+        userID
+    })
     await db.end()
 })
 test('getOne task return data from database', async ()=>{
@@ -55,17 +65,17 @@ test('add new task to db return this task', async()=>{
 
 })
 
-test('add new task if userID doesnt exist return false', async()=>{
+test('add new task if userID does not exist return false', async()=>{
     const task = await model.add('test','xxx')
     expect(task).toBeFalsy();
 })
 
-test('delete task if taskID doesnt exit return false', async ()=>{
+test('delete task if taskID does not exit return false', async ()=>{
     const task = await model.deleteOne('xxx')
     expect(task).toBeFalsy()
 })
 test('delete task return true', async ()=>{
-    const newTask = await model.add('delete',userID)
+    const newTask = await model.add('test123',userID)
     const task = await model.deleteOne(newTask.taskID)
     expect(task).toBeTruthy()
 })
