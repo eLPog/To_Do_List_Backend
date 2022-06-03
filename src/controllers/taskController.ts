@@ -1,14 +1,13 @@
-// import {TaskModel} from "../models/taskModel";
 import {Request, Response} from "express";
 import {UserFromRequest} from "../types/UserFromRequest";
 import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
 import {sendTasksToEmail} from "../utils/sendTasksToEmail";
 import {InterfaceTaskModel} from "../types/InterfaceTaskModel";
+import TaskModel from "../models/taskModel";
 
  class TaskController {
      private TaskModel:InterfaceTaskModel
-     // @ts-ignore
-     constructor({TaskModel}) {
+     constructor({TaskModel}:{TaskModel:TaskModel}) {
          this.TaskModel = TaskModel
      }
 

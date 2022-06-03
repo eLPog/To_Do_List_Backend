@@ -9,6 +9,7 @@ import {UserFromRequest} from "../types/UserFromRequest";
 import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
 import {UserInterface} from "../types/UserInterface";
 import {InterfaceUserModel} from "../types/InterfaceUserModel";
+import TokenModel from "../models/tokenModel";
 
 interface NewUser {
     name: string,
@@ -18,10 +19,9 @@ interface NewUser {
 
 class UserController {
     private UserModel: InterfaceUserModel;
-    private TokenModel: any
+    private TokenModel: TokenModel
 
-    // @ts-ignore
-    constructor({UserModel, TokenModel}) {
+    constructor({UserModel, TokenModel}:{UserModel:InterfaceUserModel,TokenModel:TokenModel}) {
         this.UserModel = UserModel
         this.TokenModel = TokenModel
     }
