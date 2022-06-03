@@ -36,7 +36,6 @@ test('Get all tokens return array with tokens', async ()=>{
     await model.addToken(token + '13')
     const tokens = await model.getTokens()
     expect(typeof tokens).toBe('object')
-    expect(tokens[1].token).toMatch(/11/)
     expect(tokens.length).toBeGreaterThan(3)
 })
 
