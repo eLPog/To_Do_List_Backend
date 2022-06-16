@@ -6,7 +6,7 @@ import {validationEmail} from "../utils/validationEmail";
 import * as jwt from 'jsonwebtoken'
 import {Request, Response} from "express";
 import {UserInterface} from "../types/UserInterface";
-import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
+import {ConflictError, ValidationError} from "../errorHandlers/errorsHandler";
 import randomatic from 'randomatic'
 import {createHash} from "../utils/createHash";
 import {sendNewPassword} from "../utils/sendNewPassword";
@@ -32,7 +32,7 @@ class AuthController {
         }
         const emailAlreadyExist = await this.AuthenticationModel.addUser(email, name, password) // return error message if email already exist
         if (emailAlreadyExist instanceof Error) {
-            throw new ValidationError('Email already exist')
+            throw new ConflictError('Email already exist')
         }
         res.status(200).json('success')
     }
@@ -62,12 +62,13 @@ class AuthController {
         const {email} = req.body
         const user: UserInterface = await this.UserModel.getUser(email)
         if (!user) {
-            throw new UnexpectedError()
+        res.status(404).json('User with this email do not exist')
+            return;
         }
         const newPassword: string = randomatic('Aa0!', 10)
         user.password = createHash(newPassword)
         await this.UserModel.editUser(email, user)
-        sendNewPassword(email,newPassword)
+        await sendNewPassword(email,newPassword)
         res.status(200).json('Success')
 
     }
