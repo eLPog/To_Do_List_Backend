@@ -26,6 +26,7 @@ import TaskModel from "../models/taskModel";
     }
 
       getAll = async (req: UserFromRequest, res: Response): Promise<void> => {
+          console.log('zapytanie')
         const {userID} = req.user
             const tasks = await this.TaskModel.getAll(userID)
             if (!tasks) {
