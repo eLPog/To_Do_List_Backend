@@ -8,16 +8,18 @@ import {FieldPacket} from "mysql2";
  class TaskModel {
 
 
-    async add(content:string, userID:string):Promise<TaskInterface | boolean> {
+    async add(title:string, content:string, userID:string):Promise<TaskInterface | boolean> {
         try {
             const newTask = {
                 taskID: v4(),
+                title,
                 content,
                 userID,
                 createdAt: getActuallyDate()
             }
-            await db.execute('INSERT INTO tasks (taskID,content,userID,createdAt) VALUES (:taskID,:content,:userID,:createdAt)', {
+            await db.execute('INSERT INTO tasks (taskID,title,content,userID,createdAt) VALUES (:taskID,:title,:content,:userID,:createdAt)', {
                 taskID: newTask.taskID,
+                title: newTask.title,
                 content: newTask.content,
                 userID: newTask.userID,
                 createdAt: newTask.createdAt
@@ -84,17 +86,26 @@ import {FieldPacket} from "mysql2";
         }
     }
 
-    async updateTask(taskID:string,newContent:string):Promise<string|boolean | TaskInterface> {
+    async updateTask(taskID:string,newTask:{title?:string,content?:string}):Promise<string|boolean | TaskInterface> {
         try {
             if (!await this.getOne(taskID)) {
                 return false
             }
-            await db.execute('UPDATE tasks SET content=:content WHERE taskID=:taskID',{
-                taskID,
-                content:newContent
-            })
+            if(newTask.content){
+                await db.execute('UPDATE tasks SET content=:content WHERE taskID=:taskID',{
+                    taskID,
+                    content:newTask.content
+                })
+            }
+            if(newTask.title){
+                await db.execute('UPDATE tasks SET title=:title WHERE taskID=:taskID',{
+                    taskID,
+                    title:newTask.title
+                })
+            }
             return await this.getOne(taskID)
-        } catch (err) {
+            }
+            catch (err) {
             console.log(err)
             await saveErrors(err.message, 'update task DB')
             return false

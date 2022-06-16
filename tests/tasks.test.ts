@@ -23,9 +23,10 @@ afterAll(async()=>{
     await db.end()
 })
 test('getOne task return data from database', async ()=>{
-    const newTask = await model.add('test',userID)
+    const newTask = await model.add('testTitle','test',userID)
     const task = await model.getOne(newTask.taskID)
     expect(task).toBeDefined();
+    expect(task.title).toEqual('testTitle');
     expect(task).not.toBeNull();
 })
 
@@ -54,10 +55,11 @@ test('get all users tasks if user do not exist returns empty array ', async ()=>
 
 test('add new task to db return this task', async()=>{
     const newTask = {
+        title:"testTitle",
         content:"test",
         userID:userID
     }
-    const task = await model.add(newTask.content, newTask.userID)
+    const task = await model.add(newTask.title, newTask.content, newTask.userID)
     expect(task).toBeDefined()
     expect(task.content).toBe("test")
     expect(task.taskID).not.toEqual([])
@@ -66,7 +68,7 @@ test('add new task to db return this task', async()=>{
 })
 
 test('add new task if userID does not exist return false', async()=>{
-    const task = await model.add('test','xxx')
+    const task = await model.add('titleTest','test','xxx')
     expect(task).toBeFalsy();
 })
 
@@ -75,21 +77,22 @@ test('delete task if taskID does not exit return false', async ()=>{
     expect(task).toBeFalsy()
 })
 test('delete task return true', async ()=>{
-    const newTask = await model.add('test123',userID)
+    const newTask = await model.add('testTitle', 'test123',userID)
     const task = await model.deleteOne(newTask.taskID)
     expect(task).toBeTruthy()
 })
 
 test('delete all tasks return true', async ()=>{
-    await model.add('test1',userID)
-    await model.add('test2',userID)
+    await model.add('testTitle', 'test1',userID)
+    await model.add('testTitle', 'test2',userID)
     const task = await model.deleteAll(userID)
     expect(task).toBeTruthy()
 })
 test('update task return updated task', async()=>{
-    const newTask = await model.add('test1', userID)
-    const updatedTask = await model.updateTask(newTask.taskID, 'test2')
+    const newTask = await model.add('testTitle', 'test1', userID)
+    const updatedTask = await model.updateTask(newTask.taskID, {title:'newTestTitle',content:'test2'})
     expect(updatedTask).toBeDefined()
+    expect(updatedTask.title).toEqual('newTestTitle')
     expect(updatedTask.content).toEqual('test2')
     expect(updatedTask.taskID).toEqual(newTask.taskID)
 })
