@@ -10,6 +10,7 @@ import {userRouter} from "../routes/userRouter";
 import {taskRouter} from "../routes/taskRouter";
 import {notFoundHandler} from "../errorHandlers/notFoundHandler";
 import {httpFormater} from "../errorHandlers/errorsHandler";
+import rateLimit from "express-rate-limit";
 
 
 class App {
@@ -32,6 +33,10 @@ class App {
             "preflightContinue": false,
             "optionsSuccessStatus": 204
 
+        }))
+        this.app.use(rateLimit({
+            windowMs:5*60*100,
+            max:100
         }))
         this.app.use(express.json())
         this.app.use(express.urlencoded({
