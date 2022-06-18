@@ -20,13 +20,9 @@ const emailSettings = {
     emailPass:process.env.EMAILPASS
 }
 const jwtAccessKey:string = process.env.JWTACCESS
-const usersLogsDirectory:string = process.env.USERSLOGSDIRECTORY
-const errorsLogsDirectory:string = process.env.ERRORSLOGSDIRECTORY
 export {
     port,
     dbSettings,
     jwtAccessKey,
-    usersLogsDirectory,
-    errorsLogsDirectory,
     emailSettings
 }

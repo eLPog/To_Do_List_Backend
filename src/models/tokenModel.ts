@@ -1,5 +1,4 @@
 import db from "../db/dbConnection";
-import {saveErrors} from "../utils/saveErrors";
 import {FieldPacket} from "mysql2";
 interface Token {
     token:string
@@ -13,7 +12,6 @@ interface Token {
             return true
         }catch(err){
             console.log(err)
-            await saveErrors(err.message, 'add token DB')
             return false
         }
     }
@@ -23,7 +21,6 @@ interface Token {
             return tokens
         }catch(err){
             console.log(err)
-            await saveErrors(err.message, 'get tokens DB')
         }
     }
     async deleteToken(token:string):Promise<boolean>{
@@ -34,7 +31,6 @@ interface Token {
             return true
         }catch(err){
             console.log(err)
-            await saveErrors(err.message, 'delete token DB')
             return false
         }
     }

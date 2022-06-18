@@ -10,7 +10,6 @@
     emailPort:'emailPort',
     emailUser:'emailUser',
     emailPass:'emailPass',
-    usersLogsDirectory:'usersLogDirectory',
-    errorsLogsDirectory:'errorsLogsDirectory'
+
 }
  */

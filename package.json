@@ -6,7 +6,8 @@
   "main": "app.js",
   "scripts": {
     "dev-start": "ts-node-dev src/app/app.ts",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

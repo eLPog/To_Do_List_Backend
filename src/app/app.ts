@@ -46,9 +46,9 @@ class App {
     }
 
     private routes() {
-        this.app.use('/v1/api/auth', authRouter)
-        this.app.use('/v1/api/user', isAuth, userRouter)
-        this.app.use('/v1/api/tasks', isAuth, taskRouter)
+        this.app.use('/v1/auth', authRouter)
+        this.app.use('/v1/user', isAuth, userRouter)
+        this.app.use('/v1/tasks', isAuth, taskRouter)
     }
     private errorHandlers(){
         this.app.use('/', notFoundHandler)
