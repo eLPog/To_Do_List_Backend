@@ -10,6 +10,7 @@ import {userRouter} from "../routes/userRouter";
 import {taskRouter} from "../routes/taskRouter";
 import {notFoundHandler} from "../errorHandlers/notFoundHandler";
 import {httpFormater} from "../errorHandlers/errorsHandler";
+import rateLimit from "express-rate-limit";
 
 
 class App {
@@ -33,6 +34,10 @@ class App {
             "optionsSuccessStatus": 204
 
         }))
+        this.app.use(rateLimit({
+            windowMs:5*60*100,
+            max:100
+        }))
         this.app.use(express.json())
         this.app.use(express.urlencoded({
             extended: true
@@ -41,10 +46,6 @@ class App {
     }
 
     private routes() {
-        this.app.post('/v1/api', (req, res)=>{
-            console.log(req.body)
-res.json({zwrotka:'dupcia fajna jest'})
-        })
         this.app.use('/v1/api/auth', authRouter)
         this.app.use('/v1/api/user', isAuth, userRouter)
         this.app.use('/v1/api/tasks', isAuth, taskRouter)

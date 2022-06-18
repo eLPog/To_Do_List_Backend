@@ -80,7 +80,7 @@ class UserController {
         }
 
         const newUser: NewUser = {
-            name: req.body.name ?? user.name,
+            name: req.body.name.trim().length>1? req.body.name : user.name,
             email: !validationEmail(req.body.email) ? email : req.body.email,
             password: newPassword ?? user.password,
         };
