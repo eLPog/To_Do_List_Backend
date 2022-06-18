@@ -1,6 +1,5 @@
 import {createHash} from "../utils/createHash";
 import {getActuallyDate} from "../utils/getActuallyDate";
-import {saveErrors} from "../utils/saveErrors";
 import {v4} from 'uuid'
 import {UserInterface} from "../types/UserInterface";
 
@@ -28,7 +27,6 @@ import {UserInterface} from "../types/UserInterface";
             return newUser;
         } catch (err) {
             console.log(err)
-            await saveErrors(err.message, 'add user DB')
             return err
         }
     }

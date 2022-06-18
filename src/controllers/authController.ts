@@ -1,6 +1,5 @@
 import {jwtAccessKey} from "../app/config";
 import {checkPassword} from "../utils/checkPassword";
-import {saveUsersLogs} from "../utils/saveLogs";
 import {registrationValidation} from "../utils/registrationValidation";
 import {validationEmail} from "../utils/validationEmail";
 import * as jwt from 'jsonwebtoken'
@@ -54,7 +53,6 @@ class AuthController {
         const token = jwt.sign(userDataSendToFront, jwtAccessKey, {expiresIn: "45m"})
         await this.UserModel.setLastLoginDate(email)
         await this.TokenModel.addToken(token)
-        await saveUsersLogs(user.email, 'sign in')
         res.status(200).json(token)
     }
 

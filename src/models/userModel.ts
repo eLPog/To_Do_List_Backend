@@ -1,4 +1,3 @@
-import { saveErrors } from '../utils/saveErrors';
 import { getActuallyDate } from '../utils/getActuallyDate';
 import {UserInterface} from "../types/UserInterface";
 import {FieldPacket} from "mysql2";
@@ -16,7 +15,6 @@ class UserModel {
       return user;
     } catch (err) {
       console.log(err);
-      await saveErrors(err.message, 'get one user DB');
     }
   }
 
@@ -29,7 +27,6 @@ class UserModel {
       return true;
     } catch (err) {
       console.log(err);
-      await saveErrors(err.message, 'add user DB');
       return false;
     }
   }
@@ -42,7 +39,6 @@ class UserModel {
       return true;
     } catch (err) {
       console.log(err);
-      await saveErrors(err.message, 'add user DB');
       return false;
     }
   }
@@ -64,7 +60,6 @@ class UserModel {
       return true;
     } catch (err) {
       console.log(err);
-      await saveErrors(err.message, 'edit user DB');
       return false;
     }
   }

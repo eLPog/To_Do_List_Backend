@@ -1,7 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import {jwtAccessKey} from '../app/config';
 import {validationEmail} from '../utils/validationEmail';
-import {saveUsersLogs} from '../utils/saveLogs';
 import {checkPassword} from '../utils/checkPassword';
 import {setNewPassword} from '../utils/setNewPassword';
 import {Response} from "express";
@@ -44,7 +43,6 @@ class UserController {
         if (!await this.TokenModel.deleteToken(token)) {
             throw new UnexpectedError()
         }
-        await saveUsersLogs(req.user.email, 'sign out');
         res.status(200).json('success');
 
     }

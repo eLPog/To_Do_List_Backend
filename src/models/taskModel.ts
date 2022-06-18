@@ -1,7 +1,6 @@
 import db from "../db/dbConnection";
 import {v4} from 'uuid'
 import {getActuallyDate} from "../utils/getActuallyDate";
-import {saveErrors} from "../utils/saveErrors";
 import {TaskInterface} from "../types/TaskInterface";
 import {FieldPacket} from "mysql2";
 
@@ -27,7 +26,6 @@ import {FieldPacket} from "mysql2";
             return newTask
         } catch (err) {
             console.log(err)
-            await saveErrors(err.message, 'add task DB')
             return false
         }
     }
@@ -40,7 +38,6 @@ import {FieldPacket} from "mysql2";
             return tasks
         } catch (err) {
             console.log(err)
-            await saveErrors(err.message, 'get all tasks DB')
         }
     }
 
@@ -52,7 +49,6 @@ import {FieldPacket} from "mysql2";
             return task
         } catch (err) {
             console.log(err)
-            await saveErrors(err.message, 'get all tasks DB')
             return false
         }
     }
@@ -68,7 +64,6 @@ import {FieldPacket} from "mysql2";
             return true
         } catch (err) {
             console.log(err)
-            await saveErrors(err.message, 'delete one task DB')
             return false
         }
     }
@@ -81,7 +76,6 @@ import {FieldPacket} from "mysql2";
             return true
         } catch (err) {
             console.log(err)
-            await saveErrors(err.message, 'delete all tasks DB')
             return false
         }
     }
@@ -107,7 +101,6 @@ import {FieldPacket} from "mysql2";
             }
             catch (err) {
             console.log(err)
-            await saveErrors(err.message, 'update task DB')
             return false
         }
     }
