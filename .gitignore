@@ -4,4 +4,3 @@ data-logs
 .env
 .idea
 test.js
-config/config.ts
