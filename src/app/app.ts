@@ -3,7 +3,7 @@ import  cors from 'cors';
 import {awilixSetup} from "../di-setup/containerSetup";
 awilixSetup()
 require('express-async-errors');
-import {port} from './config';
+import {corsOrigin, port} from './config';
 import {authRouter} from "../routes/authRouter";
 import {isAuth} from "../utils/isAuth";
 import {userRouter} from "../routes/userRouter";
@@ -31,7 +31,8 @@ class App {
         this.app.use(cors({
             "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
             "preflightContinue": false,
-            "optionsSuccessStatus": 204
+            "optionsSuccessStatus": 204,
+            origin: corsOrigin
 
         }))
         this.app.use(rateLimit({
@@ -57,7 +58,7 @@ class App {
 
 
     private runServer() {
-        this.app.listen(port, 'localhost', () => console.log(`Server is running on port ${port}`))
+        this.app.listen(port, '0.0.0.0', () => console.log(`Server is running on port ${port}`))
     }
 }
 
