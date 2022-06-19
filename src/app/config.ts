@@ -9,7 +9,6 @@ interface DataBaseSettings {
 dotenv.config()
 
 const port = parseInt(process.env.PORT || '3000') as number
-const corsOrigin = 'https://tickitoff.networkmanager.pl';
 const dbSettings:DataBaseSettings = {
     database:process.env.DBNAME,
     host:process.env.DBHOST,
@@ -27,6 +26,4 @@ export {
     port,
     dbSettings,
     jwtAccessKey,
-    emailSettings,
-    corsOrigin
-}
+    emailSettings,}
