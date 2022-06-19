@@ -38,10 +38,6 @@
 
 * send all the tasks on email
 
-## Logs and errors data save: ##
-
-* The application saves all user logins/logoffs and errors to a file. The file path is set in environment variables. 
-
 ## Database: ##
 
 * The application is built on a relational database. All data needed to properly connect to the database should be implemented as environment variables
