@@ -10,6 +10,7 @@ import {taskRouter} from "../routes/taskRouter";
 import {notFoundHandler} from "../errorHandlers/notFoundHandler";
 import {httpFormater} from "../errorHandlers/errorsHandler";
 import rateLimit from "express-rate-limit";
+import {port} from "./config";
 
 
 class App {
@@ -55,7 +56,7 @@ class App {
 
 
     private runServer() {
-        this.app.listen(3001, 'localhost', () => console.log(`Server is running on port 3001`))
+        this.app.listen(port, '0.0.0.0', () => console.log(`Server is running on port ${port}`))
     }
 }
 
