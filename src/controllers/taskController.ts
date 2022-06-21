@@ -43,6 +43,12 @@ import TaskModel from "../models/taskModel";
             }
             res.status(200).json(task)
     }
+  
+    isTaskDoneToggle = async (req:UserFromRequest, res:Response) => {
+        const {taskID} = req.params
+        await this.TaskModel.isTaskDone(taskID)
+        res.status(200).json(taskID)
+ }
 
       deleteTask = async (req: Request, res: Response): Promise<void> => {
         const {taskID} = req.params
