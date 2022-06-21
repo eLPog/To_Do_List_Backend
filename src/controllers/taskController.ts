@@ -4,6 +4,7 @@ import {UnexpectedError, ValidationError} from "../errorHandlers/errorsHandler";
 import {sendTasksToEmail} from "../utils/sendTasksToEmail";
 import {InterfaceTaskModel} from "../types/InterfaceTaskModel";
 import TaskModel from "../models/taskModel";
+import {getActuallyDate} from "../utils/getActuallyDate";
 
  class TaskController {
      private TaskModel:InterfaceTaskModel
@@ -24,6 +25,13 @@ import TaskModel from "../models/taskModel";
         res.status(200).json(newTask)
 
     }
+        isTaskDoneToggle = async (req:UserFromRequest, res:Response) => {
+        const {taskID} = req.params
+        await this.TaskModel.isTaskDone(taskID)
+        res.status(200).json(taskID)
+
+
+ }
 
       getAll = async (req: UserFromRequest, res: Response): Promise<void> => {
         const {userID} = req.user

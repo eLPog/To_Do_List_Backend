@@ -9,6 +9,7 @@ taskRouter.get('/:taskID', TaskController.getTask)
 taskRouter.post('/send',TaskController.sendTasksToEmail)
 taskRouter.post('/', TaskController.addTask)
 taskRouter.patch('/:taskID', TaskController.update)
+taskRouter.put('/:taskID', TaskController.isTaskDoneToggle)
 taskRouter.delete('/:taskID', TaskController.deleteTask)
 taskRouter.delete('/', TaskController.deleteAll)
 export {taskRouter}

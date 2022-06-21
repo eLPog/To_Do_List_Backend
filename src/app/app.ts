@@ -3,7 +3,6 @@ import  cors from 'cors';
 import {awilixSetup} from "../di-setup/containerSetup";
 awilixSetup()
 require('express-async-errors');
-import {corsOrigin, port} from './config';
 import {authRouter} from "../routes/authRouter";
 import {isAuth} from "../utils/isAuth";
 import {userRouter} from "../routes/userRouter";
@@ -11,6 +10,7 @@ import {taskRouter} from "../routes/taskRouter";
 import {notFoundHandler} from "../errorHandlers/notFoundHandler";
 import {httpFormater} from "../errorHandlers/errorsHandler";
 import rateLimit from "express-rate-limit";
+import {port} from "./config";
 
 
 class App {
@@ -31,9 +31,7 @@ class App {
         this.app.use(cors({
             "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
             "preflightContinue": false,
-            "optionsSuccessStatus": 204,
-            origin: corsOrigin
-
+            "optionsSuccessStatus": 204
         }))
         this.app.use(rateLimit({
             windowMs:5*60*100,
