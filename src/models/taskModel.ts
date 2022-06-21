@@ -7,28 +7,30 @@ import {FieldPacket} from "mysql2";
  class TaskModel {
 
 
-    async add(title:string, content:string, userID:string):Promise<TaskInterface | boolean> {
-        try {
-            const newTask = {
-                taskID: v4(),
-                title,
-                content,
-                userID,
-                createdAt: getActuallyDate()
-            }
-            await db.execute('INSERT INTO tasks (taskID,title,content,userID,createdAt) VALUES (:taskID,:title,:content,:userID,:createdAt)', {
-                taskID: newTask.taskID,
-                title: newTask.title,
-                content: newTask.content,
-                userID: newTask.userID,
-                createdAt: newTask.createdAt
-            })
-            return newTask
-        } catch (err) {
-            console.log(err)
-            return false
-        }
-    }
+     async add(title:string, content:string, userID:string):Promise<TaskInterface | boolean> {
+         try {
+             const newTask = {
+                 taskID: v4(),
+                 title,
+                 content,
+                 userID,
+                 createdAt: getActuallyDate(),
+                 isDone:0
+             }
+             await db.execute('INSERT INTO tasks (taskID,title,content,userID,createdAt,isDone) VALUES (:taskID,:title,:content,:userID,:createdAt,:isDone)', {
+                 taskID: newTask.taskID,
+                 title: newTask.title,
+                 content: newTask.content,
+                 userID: newTask.userID,
+                 createdAt: newTask.createdAt,
+                 isDone:0
+             })
+             return newTask
+         } catch (err) {
+             console.log(err)
+             return false
+         }
+     }
 
     async getAll(userID:string):Promise<TaskInterface[]> {
         try {
@@ -78,6 +80,18 @@ import {FieldPacket} from "mysql2";
             console.log(err)
             return false
         }
+    }
+     async isTaskDone(taskID:string){
+         try{
+             const task = await this.getOne(taskID);
+             await db.execute('UPDATE tasks SET isDone=:isDone WHERE taskID=:taskID', {
+                 taskID,
+                 // @ts-ignore
+                 isDone:task.isDone === 0 ? 1 : 0
+             })
+         }catch(err){
+             console.log(err)
+         }
     }
 
     async updateTask(taskID:string,newTask:{title?:string,content?:string}):Promise<string|boolean | TaskInterface> {
