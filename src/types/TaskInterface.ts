@@ -4,5 +4,7 @@ export interface TaskInterface {
     title:string,
     content:string,
     createdAt:string,
-    userID:string
+    userID:string,
+    isDone:number
+
 }
